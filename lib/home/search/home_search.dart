@@ -29,7 +29,7 @@ class HomeSearch extends StatelessWidget {
           ),
           
           Padding(
-            padding: EdgeInsets.only(top: 10, left: 30, right: 30),
+            padding: EdgeInsets.only(top: 14, left: 30, right: 30),
             child: FilledButton(
               onPressed: () {
                 print('Filled Button Pressed');
