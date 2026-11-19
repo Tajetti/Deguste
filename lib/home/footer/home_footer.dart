@@ -8,6 +8,14 @@ class HomeFooter extends StatelessWidget {
     return NavigationBar(
       indicatorColor: Color(0xFFFFE2D6),
       selectedIndex: 0,
+
+      onDestinationSelected: (index) {
+        // Início: volta para a tela inicial (se já estiver nela, não faz nada)
+        if (index == 0) {
+          Navigator.popUntil(context, (route) => route.isFirst);
+        }
+      },
+
       destinations: [
         NavigationDestination(
           icon: Icon(Icons.home_outlined),

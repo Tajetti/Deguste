@@ -4,7 +4,10 @@ import 'header/home_header.dart';
 import 'footer/home_footer.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  // Se true, abre a home com o campo de busca já ativo
+  final bool focarBusca;
+
+  const HomePage({super.key, this.focarBusca = false});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +28,7 @@ class HomePage extends StatelessWidget {
           child: Column(
             children: [
               HomeHeader(), // Chama o header
-              HomeSearch(), // Chama a pesquisa
+              HomeSearch(autofocus: focarBusca), // Chama a pesquisa
             ],
           ),
         ),
