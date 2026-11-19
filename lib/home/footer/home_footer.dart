@@ -1,18 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:projetodeguste/favorites/favorites_page.dart';
+import 'package:projetodeguste/search/search_page.dart';
 
 class HomeFooter extends StatelessWidget {
-  const HomeFooter({super.key});
+  // Aba marcada na barra: 0 = Início, 1 = Buscar, 2 = Favoritos
+  final int selectedIndex;
+
+  const HomeFooter({super.key, this.selectedIndex = 0});
 
   @override
   Widget build(BuildContext context) {
     return NavigationBar(
       indicatorColor: Color(0xFFFFE2D6),
-      selectedIndex: 0,
+      selectedIndex: selectedIndex,
 
       onDestinationSelected: (index) {
         // Início: volta para a tela inicial (se já estiver nela, não faz nada)
         if (index == 0) {
           Navigator.popUntil(context, (route) => route.isFirst);
+        }
+
+        // Buscar: abre a tela de busca (se já estiver nela, não faz nada)
+        if (index == 1 && selectedIndex != 1) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const SearchPage()),
+          );
+        }
+
+        // Favoritos: abre a tela de favoritos (se já estiver nela, não faz nada)
+        if (index == 2 && selectedIndex != 2) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const FavoritesPage()),
+          );
         }
       },
 
