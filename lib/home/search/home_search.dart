@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projetodeguste/explore/explore_page.dart';
+import 'package:projetodeguste/results/results_page.dart';
 
 class HomeSearch extends StatefulWidget {
   final bool autofocus;
@@ -31,8 +32,11 @@ class _HomeSearchState extends State<HomeSearch> {
       error = null;
     });
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Pesquisando receita: $textoReceita"))
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ResultsPage(termo: textoReceita),
+      ),
     );
 
     receita.clear();

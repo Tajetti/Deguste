@@ -11,7 +11,10 @@ import 'header/explore_header.dart';
 enum _Estado { carregando, sucesso, erro }
 
 class ExplorePage extends StatefulWidget {
-  const ExplorePage({super.key});
+  // Normalmente não precisa passar. Serve para trocar o serviço (ex.: em testes).
+  final RecipeService? service;
+
+  const ExplorePage({super.key, this.service});
 
   @override
   State<ExplorePage> createState() => _ExplorePageState();
@@ -21,7 +24,7 @@ class _ExplorePageState extends State<ExplorePage> {
   // Quantas receitas vêm a cada vez que a API é chamada
   static const int _porPagina = 10;
 
-  final _service = RecipeService();
+  late final RecipeService _service = widget.service ?? RecipeService();
   final _scroll = ScrollController();
 
   final List<Recipe> _receitas = [];

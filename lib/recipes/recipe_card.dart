@@ -43,71 +43,81 @@ class RecipeCard extends StatelessWidget {
               const SizedBox(width: 12),
 
               Expanded(
-                child: SizedBox(
-                  height: 88,
+                // Pelo menos a altura da foto. Cresce se o nome ocupar duas
+                // linhas e ainda tiver o coração embaixo.
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(minHeight: 88),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        recipe.name,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          height: 1.2,
-                          color: Color(0xFF2B2320),
-                        ),
-                      ),
-
-                      const SizedBox(height: 6),
-
-                      // Relógio + tempo total • dificuldade
-                      Row(
+                      // Em cima: nome, tempo e dificuldade
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Icon(
-                            Icons.schedule,
-                            size: 14,
-                            color: Color(0xFF8A817B),
-                          ),
-                          const SizedBox(width: 4),
-                          Flexible(
-                            child: Text(
-                              '${recipe.totalMinutes} min  •  ${recipe.dificuldadePt}',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: Color(0xFF8A817B),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      const Spacer(),
-
-                      // Nota (e coração, quando tiver)
-                      Row(
-                        children: [
-                          if (!comFavorito) const Spacer(),
-                          const Icon(
-                            Icons.star,
-                            size: 16,
-                            color: Color(0xFFF5A623),
-                          ),
-                          const SizedBox(width: 3),
                           Text(
-                            recipe.notaFormatada,
+                            recipe.name,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
-                              fontSize: 13,
+                              fontSize: 16,
                               fontWeight: FontWeight.w600,
+                              height: 1.2,
                               color: Color(0xFF2B2320),
                             ),
                           ),
-                          if (comFavorito) const Spacer(),
-                          if (comFavorito) _Coracao(recipe: recipe),
+
+                          const SizedBox(height: 6),
+
+                          // Relógio + tempo total • dificuldade
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.schedule,
+                                size: 14,
+                                color: Color(0xFF8A817B),
+                              ),
+                              const SizedBox(width: 4),
+                              Flexible(
+                                child: Text(
+                                  '${recipe.totalMinutes} min  •  ${recipe.dificuldadePt}',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color: Color(0xFF8A817B),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
+                      ),
+
+                      // Embaixo: nota (e coração, quando tiver)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 6),
+                        child: Row(
+                          children: [
+                            if (!comFavorito) const Spacer(),
+                            const Icon(
+                              Icons.star,
+                              size: 16,
+                              color: Color(0xFFF5A623),
+                            ),
+                            const SizedBox(width: 3),
+                            Text(
+                              recipe.notaFormatada,
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0xFF2B2320),
+                              ),
+                            ),
+                            if (comFavorito) const Spacer(),
+                            if (comFavorito) _Coracao(recipe: recipe),
+                          ],
+                        ),
                       ),
                     ],
                   ),

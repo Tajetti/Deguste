@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projetodeguste/results/results_page.dart';
 
 class SearchForm extends StatefulWidget {
   const SearchForm({super.key});
@@ -14,7 +15,7 @@ class _SearchFormState extends State<SearchForm> {
 
   bool get temTexto => receita.text.trim().isNotEmpty;
 
-  void pesquisarReceita() {
+  Future<void> pesquisarReceita() async {
     final textoReceita = receita.text.trim();
 
     if (textoReceita.length < 3) {
@@ -28,10 +29,18 @@ class _SearchFormState extends State<SearchForm> {
       error = null;
     });
 
-    // Por enquanto só avisa. Depois isso leva para a tela de resultados.
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Pesquisando receita: $textoReceita')),
+    // Abre os resultados. Se o usuário tocar em "Limpar pesquisa" lá,
+    // a tela de resultados volta com true e o campo é esvaziado.
+    final limpar = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ResultsPage(termo: textoReceita),
+      ),
     );
+
+    if (limpar == true && mounted) {
+      limparPesquisa();
+    }
   }
 
   void limparPesquisa() {
