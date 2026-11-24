@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:projetodeguste/explore/explore_page.dart';
 
 class HomeSearch extends StatefulWidget {
-  // Se true, o campo já abre com o teclado ativo
   final bool autofocus;
 
   const HomeSearch({super.key, this.autofocus = false});
