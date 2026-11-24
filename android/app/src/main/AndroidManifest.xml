@@ -1,4 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Necessária para buscar as receitas na API (e as fotos) quando o app é
+         instalado de verdade (release). Em debug o Flutter já adiciona sozinho. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:label="projetodeguste"
         android:name="${applicationName}"
