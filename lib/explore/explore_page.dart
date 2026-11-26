@@ -11,7 +11,6 @@ import 'header/explore_header.dart';
 enum _Estado { carregando, sucesso, erro }
 
 class ExplorePage extends StatefulWidget {
-  // Normalmente não precisa passar. Serve para trocar o serviço (ex.: em testes).
   final RecipeService? service;
 
   const ExplorePage({super.key, this.service});
@@ -21,10 +20,7 @@ class ExplorePage extends StatefulWidget {
 }
 
 class _ExplorePageState extends State<ExplorePage> {
-  // Quantas receitas vêm a cada vez que a API é chamada
-  static const int _porPagina = 10;
-
-  late final RecipeService _service = widget.service ?? RecipeService();
+  late final RecipeService _service = widget.service ?? RecipeService.instance;
   final _scroll = ScrollController();
 
   final List<Recipe> _receitas = [];
@@ -51,7 +47,7 @@ class _ExplorePageState extends State<ExplorePage> {
     setState(() => _estado = _Estado.carregando);
 
     try {
-      final pagina = await _service.listar(limit: _porPagina, skip: 0);
+      final pagina = await _service.primeiraPagina();
       if (!mounted) return;
 
       setState(() {
@@ -67,7 +63,6 @@ class _ExplorePageState extends State<ExplorePage> {
     }
   }
 
-  // Quando chega perto do fim da lista, carrega as próximas receitas
   void _aoRolar() {
     final posicao = _scroll.position;
     if (posicao.pixels >= posicao.maxScrollExtent - 300) {
@@ -81,15 +76,11 @@ class _ExplorePageState extends State<ExplorePage> {
     setState(() => _carregandoMais = true);
 
     try {
-      final pagina = await _service.listar(
-        limit: _porPagina,
-        skip: _receitas.length,
-      );
+      final pagina = await _service.listar(skip: _receitas.length);
       if (!mounted) return;
 
       setState(() {
         _receitas.addAll(pagina.receitas);
-        // Se a API não devolveu nada novo, não tem mais o que carregar
         _total = pagina.receitas.isEmpty ? _receitas.length : pagina.total;
         _carregandoMais = false;
       });
@@ -109,7 +100,7 @@ class _ExplorePageState extends State<ExplorePage> {
 
       case _Estado.erro:
         return StateMessage(
-          imagem: 'assets/image/panela.png', // Panela com "!"
+          imagem: 'assets/image/panela.png',
           iconeReserva: Icons.cloud_off_outlined,
           titulo: 'Não foi possível\ncarregar as receitas.',
           subtitulo: 'Verifique sua conexão com a internet\ne tente novamente.',
@@ -134,7 +125,6 @@ class _ExplorePageState extends State<ExplorePage> {
       body: Column(
         children: [
           ExploreHeader(
-            // Lupa: volta para a home com o campo de busca já ativo
             onSearchTap: () {
               Navigator.pushAndRemoveUntil(
                 context,

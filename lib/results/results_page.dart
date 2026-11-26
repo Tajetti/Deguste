@@ -10,10 +10,8 @@ import 'header/results_header.dart';
 enum _Estado { carregando, sucesso, erro }
 
 class ResultsPage extends StatefulWidget {
-  // O que o usuário pesquisou
   final String termo;
 
-  // Normalmente não precisa passar. Serve para trocar o serviço (ex.: em testes).
   final RecipeService? service;
 
   const ResultsPage({super.key, required this.termo, this.service});
@@ -23,7 +21,7 @@ class ResultsPage extends StatefulWidget {
 }
 
 class _ResultsPageState extends State<ResultsPage> {
-  late final RecipeService _service = widget.service ?? RecipeService();
+  late final RecipeService _service = widget.service ?? RecipeService.instance;
 
   List<Recipe> _receitas = [];
   _Estado _estado = _Estado.carregando;
@@ -51,7 +49,6 @@ class _ResultsPageState extends State<ResultsPage> {
     }
   }
 
-  // "Limpar pesquisa": volta para a tela anterior avisando que o campo deve ser limpo
   void _limpar() => Navigator.pop(context, true);
 
   Widget _conteudo() {
@@ -61,7 +58,7 @@ class _ResultsPageState extends State<ResultsPage> {
 
       case _Estado.erro:
         return StateMessage(
-          imagem: 'assets/image/panela.png', // Panela com "!"
+          imagem: 'assets/image/panela.png',
           iconeReserva: Icons.cloud_off_outlined,
           titulo: 'Não foi possível\ncarregar as receitas.',
           subtitulo: 'Verifique sua conexão com a internet\ne tente novamente.',
@@ -72,7 +69,7 @@ class _ResultsPageState extends State<ResultsPage> {
       case _Estado.sucesso:
         if (_receitas.isEmpty) {
           return StateMessage(
-            imagem: 'assets/image/lupa.png', // Lupa
+            imagem: 'assets/image/lupa.png',
             iconeReserva: Icons.search_off,
             titulo: 'Nenhum resultado encontrado.',
             subtitulo: 'Não encontramos receitas para esse nome.\nTente outro termo.',
@@ -102,7 +99,7 @@ class _ResultsPageState extends State<ResultsPage> {
         ],
       ),
 
-      bottomNavigationBar: const HomeFooter(selectedIndex: 1), // Buscar marcado
+      bottomNavigationBar: const HomeFooter(selectedIndex: 1),
     );
   }
 }

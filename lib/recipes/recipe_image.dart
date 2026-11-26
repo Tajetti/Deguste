@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-// Foto da receita (vem da internet). Mostra um cinza enquanto carrega
-// ou se a imagem não puder ser baixada.
 class RecipeImage extends StatelessWidget {
   final String url;
   final double? width;

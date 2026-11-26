@@ -17,15 +17,13 @@ class DetailsPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: creme,
 
-      // top: false => a foto continua indo até o topo, por baixo da barra de status
       body: SafeArea(
         top: false,
         child: SingleChildScrollView(
           child: Stack(
             children: [
-              DetailsHeader(recipe: recipe), // Foto + voltar + coração
+              DetailsHeader(recipe: recipe),
 
-              // Conteúdo: sobe um pouco por cima da foto
               Padding(
                 padding: const EdgeInsets.only(top: DetailsHeader.altura - 28),
                 child: Container(
@@ -40,7 +38,7 @@ class DetailsPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      DetailsInfo(recipe: recipe), // Título, nota e tempos
+                      DetailsInfo(recipe: recipe),
                       const SizedBox(height: 24),
                       DetailsIngredients(recipe: recipe),
                       const SizedBox(height: 12),

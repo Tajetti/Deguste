@@ -1,16 +1,16 @@
-// Receita como a API devolve (https://dummyjson.com/recipes)
 class Recipe {
   final int id;
   final String name;
   final List<String> ingredients;
   final List<String> instructions;
-  final int prepTimeMinutes;
-  final int cookTimeMinutes;
-  final int servings;
+  final int? prepTimeMinutes;
+  final int? cookTimeMinutes;
+  final int? servings;
   final String difficulty;
   final String cuisine;
   final String image;
-  final double rating;
+  final double? rating;
+  final List<String> mealType;
 
   const Recipe({
     required this.id,
@@ -24,25 +24,46 @@ class Recipe {
     required this.cuisine,
     required this.image,
     required this.rating,
+    required this.mealType,
   });
 
   factory Recipe.fromJson(Map<String, dynamic> json) {
+    final nome = _texto(json['name']);
+
     return Recipe(
       id: json['id'] as int,
-      name: json['name'] as String,
-      ingredients: List<String>.from(json['ingredients'] ?? const []),
-      instructions: List<String>.from(json['instructions'] ?? const []),
-      prepTimeMinutes: (json['prepTimeMinutes'] as num?)?.toInt() ?? 0,
-      cookTimeMinutes: (json['cookTimeMinutes'] as num?)?.toInt() ?? 0,
-      servings: (json['servings'] as num?)?.toInt() ?? 0,
-      difficulty: json['difficulty'] as String? ?? '',
-      cuisine: json['cuisine'] as String? ?? '',
-      image: json['image'] as String? ?? '',
-      rating: (json['rating'] as num?)?.toDouble() ?? 0,
+      name: nome.isEmpty ? 'Receita sem nome' : nome,
+      ingredients: _lista(json['ingredients']),
+      instructions: _lista(json['instructions']),
+      prepTimeMinutes: _inteiro(json['prepTimeMinutes'], minimo: 0),
+      cookTimeMinutes: _inteiro(json['cookTimeMinutes'], minimo: 0),
+      servings: _inteiro(json['servings'], minimo: 1),
+      difficulty: _texto(json['difficulty']),
+      cuisine: _texto(json['cuisine']),
+      image: _texto(json['image']),
+      rating: _nota(json['rating']),
+      mealType: _lista(json['mealType']),
     );
   }
 
-  // Usado para salvar os favoritos no aparelho
+  static String _texto(Object? valor) => valor is String ? valor.trim() : '';
+
+  static List<String> _lista(Object? valor) {
+    final itens = valor is List ? valor : [valor];
+    return itens
+        .whereType<String>()
+        .where((item) => item.trim().isNotEmpty)
+        .toList();
+  }
+
+  static int? _inteiro(Object? valor, {required int minimo}) {
+    return valor is num && valor >= minimo ? valor.toInt() : null;
+  }
+
+  static double? _nota(Object? valor) {
+    return valor is num && valor >= 0 ? valor.toDouble() : null;
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -56,14 +77,18 @@ class Recipe {
       'cuisine': cuisine,
       'image': image,
       'rating': rating,
+      'mealType': mealType,
     };
   }
 
-  // Tempo total (preparo + cozimento), como aparece nos cards: "35 min"
-  int get totalMinutes => prepTimeMinutes + cookTimeMinutes;
+  int? get totalMinutes {
+    final preparo = prepTimeMinutes;
+    final cozimento = cookTimeMinutes;
+    if (preparo == null || cozimento == null) return null;
+    return preparo + cozimento;
+  }
 
-  // Nota com vírgula, como no layout: "4,6"
-  String get notaFormatada => rating.toStringAsFixed(1).replaceAll('.', ',');
+  String? get notaFormatada => rating?.toStringAsFixed(1).replaceAll('.', ',');
 
   String get dificuldadePt {
     switch (difficulty.toLowerCase()) {

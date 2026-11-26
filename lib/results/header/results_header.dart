@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ResultsHeader extends StatelessWidget {
-  // O que o usuário pesquisou
   final String termo;
 
-  // Quantas receitas foram achadas. Enquanto for null (carregando) ou 0,
-  // a linha com a contagem e o "Limpar pesquisa" não aparece.
   final int? quantidade;
 
   final VoidCallback onLimpar;
@@ -23,12 +20,12 @@ class ResultsHeader extends StatelessWidget {
 
     return SafeArea(
       bottom: false,
-      child: Padding(
+      child: Container(
+        width: double.infinity,
         padding: const EdgeInsets.only(left: 16, right: 24, top: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Seta de voltar para a tela anterior
             IconButton(
               onPressed: () => Navigator.maybePop(context),
               icon: const Icon(
@@ -52,14 +49,12 @@ class ResultsHeader extends StatelessWidget {
               ),
             ),
 
-            // "1 receita encontrada."            Limpar pesquisa
             if (temResultados)
               Padding(
                 padding: const EdgeInsets.only(left: 8, top: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Expanded: em telas estreitas o texto quebra em vez de estourar
                     Expanded(
                       child: Text(
                         quantidade == 1

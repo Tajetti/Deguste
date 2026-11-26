@@ -11,14 +11,12 @@ class SearchPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFFBF5EA),
 
-      // Quando o teclado abre, a ilustração fica parada atrás dele
       resizeToAvoidBottomInset: false,
 
       body: Container(
         width: double.infinity,
         height: double.infinity,
 
-        // Fundo com a tigela de tomates (alinhado embaixo para ela não ser cortada)
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/image/tomatos.png'),
@@ -29,13 +27,13 @@ class SearchPage extends StatelessWidget {
 
         child: const Column(
           children: [
-            SearchHeader(), // Chama o header
-            SearchForm(), // Chama o campo e o botão
+            SearchHeader(),
+            SearchForm(),
           ],
         ),
       ),
 
-      bottomNavigationBar: const HomeFooter(selectedIndex: 1), // Buscar marcado
+      bottomNavigationBar: const HomeFooter(selectedIndex: 1),
     );
   }
 }

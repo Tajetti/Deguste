@@ -3,33 +3,45 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'recipe.dart';
 
-// Uma "página" de receitas devolvida pela API
 class RecipePage {
   final List<Recipe> receitas;
 
-  // Quantas receitas existem no total (para saber se ainda tem mais para carregar)
   final int total;
 
   const RecipePage({required this.receitas, required this.total});
 }
 
 class RecipeService {
-  // Endereço da API. Para trocar de API, é só mudar aqui.
   static const String baseUrl = 'https://dummyjson.com';
+  static const int porPagina = 10;
+
+  static final RecipeService instance = RecipeService();
 
   final http.Client _client;
+  Future<RecipePage>? _primeiraPagina;
 
   RecipeService({http.Client? client}) : _client = client ?? http.Client();
 
-  // Lista de receitas, de pouco em pouco (paginação)
-  Future<RecipePage> listar({int limit = 10, int skip = 0}) {
+  Future<RecipePage> primeiraPagina() {
+    return _primeiraPagina ??= _carregarPrimeiraPagina();
+  }
+
+  Future<RecipePage> _carregarPrimeiraPagina() async {
+    try {
+      return await listar();
+    } catch (_) {
+      _primeiraPagina = null;
+      rethrow;
+    }
+  }
+
+  Future<RecipePage> listar({int limit = porPagina, int skip = 0}) {
     final url = Uri.parse('$baseUrl/recipes').replace(
       queryParameters: {'limit': '$limit', 'skip': '$skip'},
     );
     return _buscarPagina(url);
   }
 
-  // Busca receitas pelo nome
   Future<RecipePage> buscar(String termo) {
     final url = Uri.parse('$baseUrl/recipes/search').replace(
       queryParameters: {'q': termo, 'limit': '50'},

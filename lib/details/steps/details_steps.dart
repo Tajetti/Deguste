@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projetodeguste/recipes/recipe.dart';
 
-// Seção "Modo de preparo", com cada passo numerado
 class DetailsSteps extends StatelessWidget {
   final Recipe recipe;
 
@@ -24,13 +23,18 @@ class DetailsSteps extends StatelessWidget {
 
         const SizedBox(height: 12),
 
+        if (recipe.instructions.isEmpty)
+          const Text(
+            'Modo de preparo não informado.',
+            style: TextStyle(fontSize: 14, color: Color(0xFF8A817B)),
+          ),
+
         for (var i = 0; i < recipe.instructions.length; i++)
           Padding(
             padding: const EdgeInsets.only(bottom: 14),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Círculo com o número do passo
                 Container(
                   width: 26,
                   height: 26,

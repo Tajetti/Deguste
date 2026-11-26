@@ -4,6 +4,6 @@ import 'package:projetodeguste/favorites/favorites_store.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await FavoritesStore.instance.load(); // Lê os favoritos salvos no aparelho
+  await FavoritesStore.instance.load();
   runApp(const App());
 }

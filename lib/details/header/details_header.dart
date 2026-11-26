@@ -3,9 +3,7 @@ import 'package:projetodeguste/favorites/favorites_store.dart';
 import 'package:projetodeguste/recipes/recipe.dart';
 import 'package:projetodeguste/recipes/recipe_image.dart';
 
-// Foto da receita no topo, com o botão de voltar e o coração de favoritar
 class DetailsHeader extends StatelessWidget {
-  // Altura da foto (a página usa isso para encaixar o conteúdo por cima dela)
   static const double altura = 300;
 
   final Recipe recipe;
@@ -25,7 +23,6 @@ class DetailsHeader extends StatelessWidget {
         children: [
           RecipeImage(url: recipe.image, height: altura),
 
-          // Voltar
           Positioned(
             top: topo + 8,
             left: 16,
@@ -39,7 +36,6 @@ class DetailsHeader extends StatelessWidget {
             ),
           ),
 
-          // Favoritar
           Positioned(
             top: topo + 8,
             right: 16,
@@ -65,7 +61,6 @@ class DetailsHeader extends StatelessWidget {
   }
 }
 
-// Botão branco redondo que fica por cima da foto
 class _BotaoRedondo extends StatelessWidget {
   final Widget child;
   final VoidCallback onTap;

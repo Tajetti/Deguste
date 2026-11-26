@@ -12,7 +12,6 @@ class SearchHeader extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Seta de voltar para a tela anterior
             IconButton(
               onPressed: () => Navigator.maybePop(context),
               icon: const Icon(
@@ -22,7 +21,6 @@ class SearchHeader extends StatelessWidget {
               ),
             ),
 
-            // Título + subtítulo
             const Padding(
               padding: EdgeInsets.only(left: 8, top: 16),
               child: Column(

@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 
-// Bloco usado nas telas "Nenhum favorito", "Nenhum resultado" e
-// "Erro ao carregar": ilustração, título, texto de apoio e um botão.
 class StateMessage extends StatelessWidget {
-  // Caminho da ilustração em assets/image/
   final String imagem;
 
-  // Ícone mostrado no lugar da ilustração se o arquivo não existir
   final IconData iconeReserva;
 
   final String titulo;
@@ -29,7 +25,6 @@ class StateMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      // Rolagem para não estourar em telas pequenas
       child: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
@@ -101,7 +96,6 @@ class StateMessage extends StatelessWidget {
   }
 }
 
-// Círculo com um ícone, usado enquanto a ilustração não estiver nos assets
 class _IlustracaoReserva extends StatelessWidget {
   final IconData icone;
 

@@ -49,8 +49,8 @@ class HomeHeader extends StatelessWidget {
               ),
             ),
           ),
-        ], // Fecha children
-      ), // Fecha Column
-    ); // Fecha SafeArea
-  } // Fecha build
-} // Fecha HomeHeader
+        ],
+      ),
+    );
+  }
+}

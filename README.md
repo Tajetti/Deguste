@@ -2,7 +2,7 @@
 
 Aplicativo de receitas feito em **Flutter**. O Degustê ajuda a descobrir receitas para todos os momentos: o usuário pode explorar uma lista de receitas, buscar pelo nome, ver os detalhes de cada uma e salvar as favoritas.
 
-> 🚧 **Projeto em desenvolvimento.** As 10 telas do layout já têm código. Ainda falta conferir o visual rodando no aparelho e adicionar duas ilustrações (veja [Próximos passos](#próximos-passos)).
+> 🚧 **Projeto em desenvolvimento.** As 10 telas do layout já têm código. Ainda falta conferir o visual rodando no aparelho (veja [Próximos passos](#próximos-passos)).
 
 ---
 
@@ -24,11 +24,11 @@ Aplicativo de receitas feito em **Flutter**. O Degustê ajuda a descobrir receit
 
 ## Funcionalidades
 
-- **Tela inicial** com a marca, campo de busca e botão **Explorar receitas**.
+- **Tela inicial** com a marca, campo de busca e botão **Explorar receitas**. Ao abrir, já começa a carregar as primeiras receitas.
 - **Explorar:** lista de receitas vinda da API, carregada aos poucos (10 por vez) conforme você rola.
 - **Buscar:** busca pelo nome da receita, com validação de no mínimo 3 caracteres, a partir da tela inicial ou da aba **Buscar**.
 - **Resultados** da busca, com a contagem de receitas e o link **Limpar pesquisa**.
-- **Detalhes da receita:** foto, nota, tipo de culinária, tempo de preparo e cozimento, porções, ingredientes e modo de preparo passo a passo.
+- **Detalhes da receita:** foto, nota, tipo de culinária, tipo de refeição, tempo de preparo e cozimento, porções, ingredientes e modo de preparo passo a passo.
 - **Favoritos:** o coração salva a receita no aparelho, e ela continua lá quando você fecha e abre o app.
 - **Estados da tela:** carregando (cards cinza), erro ao carregar (com **Tentar novamente**), nenhum resultado e nenhum favorito.
 - **Barra de navegação** inferior (Início, Buscar, Favoritos).
@@ -51,8 +51,6 @@ O layout do app tem 10 telas, e todas já estão implementadas:
 | 8 | Nenhum resultado | `lib/results/` (estado vazio) |
 | 9 | Carregando | `lib/recipes/states/recipes_loading.dart` |
 | 10 | Erro ao carregar | `lib/recipes/states/state_message.dart` |
-
-As telas 8 e 10 usam ilustrações que ainda não estão no projeto. Enquanto isso, aparece um ícone no lugar (veja [Ilustrações](#ilustrações)).
 
 ---
 
@@ -154,13 +152,29 @@ As receitas vêm da API pública [DummyJSON](https://dummyjson.com/docs/recipes)
 
 | Para quê | Chamada |
 |----------|---------|
-| Lista (Explorar) | `GET /recipes?limit=10&skip=N` |
+| Lista (Tela Principal e Explorar) | `GET /recipes?limit=10&skip=N` |
 | Busca | `GET /recipes/search?q=termo&limit=50` |
 
 - O endereço da API fica em um só lugar: `RecipeService.baseUrl`, em `lib/recipes/recipe_service.dart`. Para usar outra API, é lá (e no modelo `recipe.dart`) que se mexe.
+- **Carregamento inicial:** ao abrir o app, a Tela Principal já pede as 10 primeiras receitas, e a tela Explorar reaproveita essa resposta. Se o pedido falhar, ele é refeito na próxima tentativa.
 - Na tela Explorar, ao chegar perto do fim da lista, o app pede as próximas 10 receitas.
-- A dificuldade ("Easy" vira "Fácil") e o tipo de culinária ("Italian" vira "Italiana") são traduzidos pelo app. Os **nomes das receitas, ingredientes e modo de preparo** vêm da API em inglês, e não são traduzidos.
+- **Detalhes:** o app não chama `/recipes/{id}`. A tela reaproveita o objeto da receita recebido na lista ou na busca, que já traz todos os dados exibidos. Nos Favoritos, usa a cópia salva no aparelho.
+- **Consultas repetidas:** os pedidos começam quando uma tela é criada (`initState`) ou por uma ação do usuário, e não a cada reconstrução da tela. O pedido inicial é compartilhado entre a Tela Principal e o Explorar, e a paginação não faz duas chamadas ao mesmo tempo.
+- A dificuldade ("Easy" vira "Fácil") e o tipo de culinária ("Italian" vira "Italiana") são traduzidos pelo app. Os **nomes das receitas, ingredientes, modo de preparo e tipo de refeição** vêm da API em inglês, e não são traduzidos.
 - Os **favoritos** são salvos no aparelho (`shared_preferences`), com os dados completos da receita, e continuam lá quando o app é reaberto.
+
+### Dados ausentes ou inválidos
+
+| Campo | O que o app faz |
+|-------|-----------------|
+| `id` | É obrigatório. Sem ele, a resposta é tratada como incompatível e aparece o erro com **Tentar novamente** |
+| `name` | Mostra "Receita sem nome" |
+| `prepTimeMinutes`, `cookTimeMinutes` | Nunca viram zero. Se faltar um deles, o card mostra "Tempo não informado", e os Detalhes mostram "N/D" no tempo ausente |
+| `servings` | Se faltar ou for menor que 1, a caixa de porções não aparece |
+| `rating` | A nota não aparece |
+| `ingredients`, `instructions` | Os Detalhes avisam que não foram informados |
+| `mealType` | É lido como lista. Sem ele, a linha não aparece |
+| `image` | Aparece um ícone no lugar da foto |
 
 ---
 
@@ -174,10 +188,10 @@ Algumas telas usam ilustrações em `assets/image/`:
 | `leaves.png` | Folhas do logotipo | ✅ No projeto |
 | `tomatos.png` | Fundo da tela Buscar | ✅ No projeto |
 | `pote.png` | Nenhum favorito (pote com coração) | ✅ No projeto |
-| `panela.png` | Erro ao carregar (panela com "!") | ⏳ Falta adicionar |
-| `lupa.png` | Nenhum resultado (lupa) | ⏳ Falta adicionar |
+| `panela.png` | Erro ao carregar (panela com "!") | ✅ No projeto |
+| `lupa.png` | Nenhum resultado (lupa) | ✅ No projeto |
 
-Se `panela.png` ou `lupa.png` não existirem, a tela mostra um ícone no lugar, sem dar erro. Ao colocar o arquivo com esse nome na pasta, a ilustração aparece sozinha.
+Nas telas de erro, nenhum resultado e nenhum favorito, se a imagem não carregar, aparece um ícone no lugar. Para trocar uma ilustração, substitua o arquivo mantendo o mesmo nome.
 
 ---
 
@@ -256,7 +270,7 @@ flutter analyze
 
 O projeto ainda não tem testes automatizados. O arquivo `test/widget_test.dart` é só o esqueleto padrão do Flutter.
 
-O `RecipeService` aceita um cliente HTTP, e as telas Explorar e Resultados aceitam um serviço opcional. Isso foi pensado para testar com respostas falsas, sem depender da internet.
+O `RecipeService` aceita um cliente HTTP, e a Tela Principal, o Explorar e os Resultados aceitam um serviço opcional. Isso foi pensado para testar com respostas falsas, sem depender da internet.
 
 ```bash
 flutter test
@@ -266,7 +280,6 @@ flutter test
 
 ## Próximos passos
 
-- [ ] Adicionar as ilustrações `panela.png` (erro) e `lupa.png` (nenhum resultado) em `assets/image/`
 - [ ] Rodar o app e comparar cada tela com o layout, ajustando espaçamentos e tamanhos
 - [ ] Escrever testes de widget para as telas
 - [ ] Traduzir ingredientes e modo de preparo (hoje vêm em inglês da API)

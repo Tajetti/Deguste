@@ -15,23 +15,20 @@ class FavoritesPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFFBF5EA),
 
-      // Se atualiza sozinho quando o usuário favorita ou desfavorita algo
       body: ListenableBuilder(
         listenable: store,
         builder: (context, _) {
           final receitas = store.receitas;
 
-          // Nenhum favorito ainda: tela 7
           if (receitas.isEmpty) {
             return const Column(
               children: [
-                FavoritesHeader(), // Chama o header
+                FavoritesHeader(),
                 Expanded(child: FavoritesEmpty()),
               ],
             );
           }
 
-          // Com favoritos: tela 6
           return Column(
             children: [
               const FavoritesHeader(subtitulo: 'Minhas receitas favoritas'),
@@ -43,7 +40,7 @@ class FavoritesPage extends StatelessWidget {
         },
       ),
 
-      bottomNavigationBar: const HomeFooter(selectedIndex: 2), // Favoritos marcado
+      bottomNavigationBar: const HomeFooter(selectedIndex: 2),
     );
   }
 }

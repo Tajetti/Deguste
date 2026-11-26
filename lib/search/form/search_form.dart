@@ -29,8 +29,6 @@ class _SearchFormState extends State<SearchForm> {
       error = null;
     });
 
-    // Abre os resultados. Se o usuário tocar em "Limpar pesquisa" lá,
-    // a tela de resultados volta com true e o campo é esvaziado.
     final limpar = await Navigator.push<bool>(
       context,
       MaterialPageRoute(
@@ -76,7 +74,6 @@ class _SearchFormState extends State<SearchForm> {
 
               prefixIcon: const Icon(Icons.search),
 
-              // O X só aparece quando tem texto no campo
               suffixIcon: temTexto
                   ? IconButton(
                       onPressed: limparPesquisa,
@@ -88,7 +85,7 @@ class _SearchFormState extends State<SearchForm> {
               fillColor: Colors.white,
 
               errorText: error,
-              helperText: '   ', // Reserva o espaço do erro para o layout não pular
+              helperText: '   ',
 
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),

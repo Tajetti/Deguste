@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 class FavoritesHeader extends StatelessWidget {
-  // Linha de apoio embaixo do logotipo. Quando for null, não aparece
-  // (é o caso da tela "nenhum favorito").
   final String? subtitulo;
 
   const FavoritesHeader({super.key, this.subtitulo});

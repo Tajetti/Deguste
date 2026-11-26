@@ -3,17 +3,13 @@ import 'package:projetodeguste/details/details_page.dart';
 import 'recipe.dart';
 import 'recipe_card.dart';
 
-// Lista de cards de receitas. Tocar em um card abre os detalhes da receita.
 class RecipeList extends StatelessWidget {
   final List<Recipe> recipes;
 
-  // Mostra o coração de favoritar em cada card (resultados e favoritos)
   final bool comFavorito;
 
-  // Usado na tela Explorar para saber quando o usuário chegou perto do fim
   final ScrollController? controller;
 
-  // Mostra uma rodinha no fim da lista enquanto carrega mais receitas
   final bool carregandoMais;
 
   const RecipeList({
@@ -32,7 +28,6 @@ class RecipeList extends StatelessWidget {
       itemCount: recipes.length + (carregandoMais ? 1 : 0),
       separatorBuilder: (context, index) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
-        // Último item: a rodinha de "carregando mais"
         if (index >= recipes.length) {
           return const Padding(
             padding: EdgeInsets.symmetric(vertical: 16),

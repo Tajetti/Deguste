@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:projetodeguste/recipes/recipe.dart';
 
-// Nome da receita, nota, tipo de culinária e as caixinhas de tempo e porções
 class DetailsInfo extends StatelessWidget {
   final Recipe recipe;
 
   const DetailsInfo({super.key, required this.recipe});
 
+  String _minutos(int? valor) => valor == null ? 'N/D' : '$valor min';
+
   @override
   Widget build(BuildContext context) {
+    final nota = recipe.notaFormatada;
+    final culinaria = recipe.culinariaPt;
+    final porcoes = recipe.servings;
+    final faltaTempo =
+        recipe.prepTimeMinutes == null || recipe.cookTimeMinutes == null;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -25,31 +32,43 @@ class DetailsInfo extends StatelessWidget {
 
         const SizedBox(height: 10),
 
-        // ★ 4,6 / 5  |  Italiana
         Row(
           children: [
-            const Icon(Icons.star, size: 18, color: Color(0xFFF5A623)),
-            const SizedBox(width: 4),
-            Text(
-              '${recipe.notaFormatada} / 5',
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF2B2320),
+            if (nota != null) ...[
+              const Icon(Icons.star, size: 18, color: Color(0xFFF5A623)),
+              const SizedBox(width: 4),
+              Text(
+                '$nota / 5',
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF2B2320),
+                ),
               ),
-            ),
-            const SizedBox(width: 12),
-            Container(width: 1, height: 14, color: const Color(0xFFCFC6BD)),
-            const SizedBox(width: 12),
+            ],
+            if (nota != null && culinaria.isNotEmpty) ...[
+              const SizedBox(width: 12),
+              Container(width: 1, height: 14, color: const Color(0xFFCFC6BD)),
+              const SizedBox(width: 12),
+            ],
             Flexible(
               child: Text(
-                recipe.culinariaPt,
+                culinaria,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(fontSize: 14, color: Color(0xFF8A817B)),
               ),
             ),
           ],
         ),
+
+        if (recipe.mealType.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(top: 6),
+            child: Text(
+              'Tipo de refeição: ${recipe.mealType.join(', ')}',
+              style: const TextStyle(fontSize: 14, color: Color(0xFF8A817B)),
+            ),
+          ),
 
         const SizedBox(height: 16),
 
@@ -58,7 +77,7 @@ class DetailsInfo extends StatelessWidget {
             Expanded(
               child: _Caixinha(
                 icone: Icons.schedule,
-                valor: '${recipe.prepTimeMinutes} min',
+                valor: _minutos(recipe.prepTimeMinutes),
                 rotulo: 'preparo',
               ),
             ),
@@ -66,20 +85,31 @@ class DetailsInfo extends StatelessWidget {
             Expanded(
               child: _Caixinha(
                 icone: Icons.soup_kitchen_outlined,
-                valor: '${recipe.cookTimeMinutes} min',
+                valor: _minutos(recipe.cookTimeMinutes),
                 rotulo: 'cozimento',
               ),
             ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: _Caixinha(
-                icone: Icons.person_outline,
-                valor: '${recipe.servings}',
-                rotulo: 'porções',
+            if (porcoes != null) ...[
+              const SizedBox(width: 10),
+              Expanded(
+                child: _Caixinha(
+                  icone: Icons.person_outline,
+                  valor: '$porcoes',
+                  rotulo: 'porções',
+                ),
               ),
-            ),
+            ],
           ],
         ),
+
+        if (faltaTempo)
+          const Padding(
+            padding: EdgeInsets.only(top: 6),
+            child: Text(
+              'N/D: não informado',
+              style: TextStyle(fontSize: 11, color: Color(0xFF8A817B)),
+            ),
+          ),
       ],
     );
   }

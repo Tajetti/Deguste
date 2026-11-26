@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-// Cards cinza que aparecem enquanto as receitas estão sendo carregadas
 class RecipesLoading extends StatelessWidget {
   final int quantidade;
 
@@ -9,7 +8,6 @@ class RecipesLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      // Não rola: é só um espaço reservado
       physics: const NeverScrollableScrollPhysics(),
       padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
       itemCount: quantidade,
@@ -57,7 +55,6 @@ class _CardEsqueleto extends StatelessWidget {
 }
 
 class _Barra extends StatelessWidget {
-  // De 0 a 1: quanto da largura disponível a barra ocupa
   final double largura;
 
   const _Barra({required this.largura});

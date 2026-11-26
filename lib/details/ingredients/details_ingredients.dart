@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projetodeguste/recipes/recipe.dart';
 
-// Seção "Ingredientes", com um marcador para cada item
 class DetailsIngredients extends StatelessWidget {
   final Recipe recipe;
 
@@ -22,6 +21,12 @@ class DetailsIngredients extends StatelessWidget {
         ),
 
         const SizedBox(height: 10),
+
+        if (recipe.ingredients.isEmpty)
+          const Text(
+            'Ingredientes não informados.',
+            style: TextStyle(fontSize: 14, color: Color(0xFF8A817B)),
+          ),
 
         for (final ingrediente in recipe.ingredients)
           Padding(
